@@ -1,33 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="copyright" content="Copyright (c) Google, Inc 2011." >
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<script src="orion/plugin.js"></script>
-	<script>
-	    /*globals window eclipse*/
-		var serviceImpl = {
-			run: function(text) {
-			  /* no-op should not be called? */
-			}
-		};
-		window.onload = function() {
-		    var baseURL = window.location.toString().split('/');
-		    baseURL.pop();
-		    baseURL = baseURL.join('/');
-			var provider = new eclipse.PluginProvider();
-			provider.registerServiceProvider(
-				"orion.page.link",
-				serviceImpl,
-				{
-					name: "Debug",
-					id: "orion.debug",
-					href: baseURL+"/pluginPlayer.html"
-				}
-			);
-			provider.connect();
-		};
-	</script>
+  <meta name="copyright" content="Copyright (c) Google, Inc 2011." >
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="orion/plugin.js"></script>
+  <script>
+      /*globals window eclipse console*/
+    var serviceImpl = {
+      run: function(text) {
+        /* no-op should not be called? */
+      }
+    };
+    window.onload = function() {
+        var baseURL = window.location.toString().split('/');
+        baseURL.pop();
+        baseURL = baseURL.join('/');
+        console.log("pluginPlayer: baseURL="+baseURL);
+      var provider = new eclipse.PluginProvider();
+      provider.registerServiceProvider(
+        "orion.page.link",
+        serviceImpl,
+        {
+          name: "PluginPlayer",
+          id: "orion.pluginPlayer",
+          href: baseURL+"/pluginPlayer.html"
+        }
+      );
+      provider.connect(
+        function callback(){
+          console.log("orion.pluginPlayer connected, home page: https://github.com/johnjbarton/orion.pluginPlayer");
+        },
+        function errback() {
+          console.error("orion.pluginPlayer Plugin Error: ", arguments);
+        }
+      );
+    };
+  </script>
 </head>
 <body>
 </body>
