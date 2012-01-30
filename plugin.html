@@ -12,10 +12,12 @@
       }
     };
     window.onload = function() {
-        var baseURL = window.location.toString().split('/');
-        baseURL.pop();
-        baseURL = baseURL.join('/');
-        console.log("pluginPlayer: baseURL="+baseURL);
+      // eg http://127.0.0.2:8080/...
+      var baseURL = window.location.toString();
+      baseURL = baseURL.split('/');
+      baseURL = baseURL.slice(0,3);
+      baseURL = baseURL.join('/');
+      console.log("pluginPlayer: baseURL="+baseURL);
       var provider = new eclipse.PluginProvider();
       provider.registerServiceProvider(
         "orion.page.link",
@@ -23,7 +25,7 @@
         {
           name: "PluginPlayer",
           id: "orion.pluginPlayer",
-          href: baseURL+"/pluginPlayer.html"
+          href: baseURL+"/orion.pluginPlayer/pluginPlayer.html"
         }
       );
       provider.connect(
