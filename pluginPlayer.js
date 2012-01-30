@@ -39,10 +39,7 @@ var pluginPlayer = {
 
   openMedia: function (info, statusService, event) {
     this.iframe = this.iframe || document.querySelector("#player");
-    this.iframe.contentWindow.addEventListener('load', function () {
-      statusService.setMessage("Now Playing " + info.id);
-    });
-    this.iframe.src = info.url;
+    this.iframe.src = info.href;
     statusService.setMessage("Loading " + info.id);
   }
 
@@ -76,12 +73,12 @@ dojo.addOnLoad(function() {
           console.error("orion.pluginPlayer.media skipped, no id", info, service);
           return;
         }
-        if (!info.url) {
-          console.error("orion.pluginPlayer.media skipped, no url", info, service);
+        if (!info.href) {
+          console.error("orion.pluginPlayer.media skipped, no href", info, service);
           return;
         }
         var title = info.title || info.id;
-        var btn = dojo.place('<a id='+id+' title='+title+'>'+id+'</a>', pageActions, "last");
+        var btn = dojo.place('<a id=\"'+id+'\" title=\"'+title+'\">'+id+'</a>', pageActions, "last");
         dojo.addClass(btn, "commandLink");
         dojo.connect(btn, "onclick", pluginPlayer.openMedia.bind(pluginPlayer, info, statusService));
       });
