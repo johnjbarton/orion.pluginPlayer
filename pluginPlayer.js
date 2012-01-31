@@ -13,10 +13,10 @@
 /*jslint browser:true devel:true*/
 /*global define dijit dojo orion widgets serviceRegistry:true window*/
 
-define(['require', 'dojo', 'orion/bootstrap', 'orion/status', 'orion/progress', 'orion/commands', 'orion/fileClient', 'orion/operationsClient',
+define(['require', 'dojo', 'orion/bootstrap', 'orion/util', 'orion/status', 'orion/progress', 'orion/commands', 'orion/fileClient', 'orion/operationsClient',
           'orion/searchClient', 'orion/globalCommands', 'orion/dialogs',
           'dojo/parser', 'dojo/hash', 'dijit/layout/BorderContainer', 'dijit/layout/ContentPane', 'orion/widgets/RegistryTree'], 
-      function(require, dojo, mBootstrap, mStatus, mProgress, mCommands, mFileClient, mOperationsClient, mSearchClient, mGlobalCommands, mDialogs) {
+      function(require, dojo, mBootstrap, mUtil, mStatus, mProgress, mCommands, mFileClient, mOperationsClient, mSearchClient, mGlobalCommands, mDialogs) {
 
 // extensionPoint: string like "orion.edit.command" 
 // serviceRegistry: core thingy
@@ -38,11 +38,31 @@ function processExtensions(extensionPoint, serviceRegistry, onServiceInfo) {
 var pluginPlayer = {
 
   openMedia: function (info, statusService, event) {
+    this.load(info, statusService);
+    this.setTitle(info);
+    this.resetPageActions();
+  },
+  
+  load: function(info, statusService) {
     this.iframe = this.iframe || document.querySelector("#player");
     this.iframe.src = info.href;
     statusService.setMessage("Loading " + info.id);
-  }
+  },
 
+  setTitle: function(info) {
+    var pageTitle = document.querySelector('#pageTitle');
+    pageTitle.innerHTML = info.title || info.id;
+  },
+  
+  resetPageActions: function() {
+    // TODO check if visual plugin contributes page actions.
+    var pageToolbar = document.querySelector('#pageToolbar');
+    pageToolbar.classList.add('noShow');
+    mUtil.forceLayout(pageToolbar);
+    var pageToolbar_splitter = document.querySelector('#pageToolbar_splitter');
+    pageToolbar_splitter.classList.add('noShow');
+    mUtil.forceLayout(pageToolbar_splitter);    
+  }
 };
 
 dojo.addOnLoad(function() {
